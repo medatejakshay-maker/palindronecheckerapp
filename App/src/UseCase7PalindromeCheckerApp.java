@@ -1,95 +1,75 @@
 import java.util.Scanner;
 
+/**
+ * ================================================================
+ * MAIN CLASS – UseCase9RecursivePalindrome
+ * ================================================================
+ *
+ * Use Case 9: Recursive Palindrome Checker
+ *
+ * Description:
+ * This class validates a palindrome using recursion.
+ *
+ * Characters are compared from the outer positions
+ * moving inward using recursive calls.
+ *
+ * The recursion stops when:
+ * - All characters are matched, or
+ * - A mismatch is found.
+ *
+ * This use case demonstrates divide-and-conquer
+ * logic using method recursion.
+ *
+ * @author Developer
+ * @version 9.0
+ */
+
 public class UseCase7PalindromeCheckerApp {
 
-    // Node class for singly linked list
-    static class Node {
-        char data;
-        Node next;
+    /**
+     * Application entry point for UC9.
+     *
+     * @param args Command-line arguments
+     */
+    public static void main(String[] args) {
 
-        Node(char data) {
-            this.data = data;
-            this.next = null;
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.print("Enter a string: ");
+        String input = scanner.nextLine();
+
+        boolean result = check(input, 0, input.length() - 1);
+
+        if (result) {
+            System.out.println("The string is a Palindrome.");
+        } else {
+            System.out.println("The string is NOT a Palindrome.");
         }
+
+        scanner.close();
     }
 
-    // Convert string to linked list
-    public static Node createList(String input) {
-        Node head = null, tail = null;
+    /**
+     * Recursively checks whether a string is palindrome.
+     *
+     * @param s Input string
+     * @param start Starting index
+     * @param end Ending index
+     * @return true if palindrome, otherwise false
+     */
+    private static boolean check(String s, int start, int end) {
 
-        for (char c : input.toCharArray()) {
-            Node newNode = new Node(c);
-            if (head == null) {
-                head = newNode;
-                tail = newNode;
-            } else {
-                tail.next = newNode;
-                tail = newNode;
-            }
-        }
-        return head;
-    }
-
-    // Reverse linked list
-    public static Node reverse(Node head) {
-        Node prev = null;
-        Node current = head;
-
-        while (current != null) {
-            Node next = current.next;
-            current.next = prev;
-            prev = current;
-            current = next;
-        }
-        return prev;
-    }
-
-    // Check palindrome using linked list
-    public static boolean isPalindrome(Node head) {
-
-        if (head == null || head.next == null) {
+        // Base condition
+        if (start >= end) {
             return true;
         }
 
-        Node slow = head;
-        Node fast = head;
-
-        // Find middle using fast and slow pointers
-        while (fast != null && fast.next != null) {
-            slow = slow.next;
-            fast = fast.next.next;
+        // If characters do not match
+        if (s.charAt(start) != s.charAt(end)) {
+            return false;
         }
 
-        // Reverse second half
-        Node secondHalf = reverse(slow);
-        Node firstHalf = head;
-
-        // Compare halves
-        while (secondHalf != null) {
-            if (firstHalf.data != secondHalf.data) {
-                return false;
-            }
-            firstHalf = firstHalf.next;
-            secondHalf = secondHalf.next;
-        }
-
-        return true;
-    }
-
-    public static void main(String[] args) {
-
-        Scanner sc = new Scanner(System.in);
-
-        System.out.print("Enter input: ");
-        String input = sc.nextLine();
-
-        Node head = createList(input);
-
-        boolean result = isPalindrome(head);
-
-        System.out.println("Input : " + input);
-        System.out.println("Is Palindrome? : " + result);
-
-        sc.close();
+        // Recursive call
+        return check(s, start + 1, end - 1);
     }
 }
